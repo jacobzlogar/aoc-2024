@@ -2,8 +2,7 @@ use miette::{miette, IntoDiagnostic, Result};
 use std::collections::HashMap;
 
 pub fn run() -> Result<()> {
-    let input = std::fs::read_to_string("data/day5.txt")
-        .into_diagnostic()?;
+    let input = std::fs::read_to_string("data/day5.txt").into_diagnostic()?;
     let mut queue = PrintQueue::parse(&input);
     println!("Day 5, part 1: {:?}", solve(&mut queue, false));
     queue.total = 0;
@@ -15,7 +14,7 @@ pub fn run() -> Result<()> {
 struct PrintQueue {
     pages: Vec<Vec<u32>>,
     updates: Vec<(u32, u32)>,
-    total: u32
+    total: u32,
 }
 
 impl PrintQueue {
@@ -42,14 +41,15 @@ impl PrintQueue {
         let queue = PrintQueue {
             pages,
             updates,
-            total: 0
+            total: 0,
         };
         queue
     }
 }
 
 fn parse_update(text: &str) -> Result<(u32, u32)> {
-    let res: Result<Vec<u32>> = text.split("|")
+    let res: Result<Vec<u32>> = text
+        .split("|")
         .into_iter()
         .map(|n| n.parse::<u32>().into_diagnostic())
         .collect();
@@ -57,9 +57,7 @@ fn parse_update(text: &str) -> Result<(u32, u32)> {
         Err(e) => {
             return Err(miette!(e));
         }
-        Ok(o) => {
-            return Ok((o[0], o[1]))
-        }
+        Ok(o) => return Ok((o[0], o[1])),
     }
 }
 
@@ -72,24 +70,26 @@ fn parse_page(text: &str) -> Result<Vec<u32>> {
 
 fn solve(queue: &mut PrintQueue, part_2: bool) -> u32 {
     for page in &queue.pages {
-        let matched = page.iter()
-            .enumerate()
-            .all(|(index, point)| {
-                let (left, right) = page.split_at(index);
-                let right = &right[1..];
-                let before = left.iter().all(|left| {
-                    queue.updates
-                        .iter()
-                        .find(|(page_left, page_right)| *page_right == *point && *page_left == *left).is_some()
-                });
-                let after = right.iter().all(|right| {
-                    queue.updates
-                        .iter()
-                        .find(|(page_left, page_right)| *page_right == *right && *page_left == *point).is_some()
-                });
-                return before && after;
+        let matched = page.iter().enumerate().all(|(index, point)| {
+            let (left, right) = page.split_at(index);
+            let right = &right[1..];
+            let before = left.iter().all(|left| {
+                queue
+                    .updates
+                    .iter()
+                    .find(|(page_left, page_right)| *page_right == *point && *page_left == *left)
+                    .is_some()
             });
-        if matched && ! part_2 {
+            let after = right.iter().all(|right| {
+                queue
+                    .updates
+                    .iter()
+                    .find(|(page_left, page_right)| *page_right == *right && *page_left == *point)
+                    .is_some()
+            });
+            return before && after;
+        });
+        if matched && !part_2 {
             let (_, right) = page.split_at(page.len() / 2);
             queue.total += right[0] as u32;
         } else if !matched && part_2 {
@@ -98,21 +98,19 @@ fn solve(queue: &mut PrintQueue, part_2: bool) -> u32 {
             // would return the following tuples
             // (47, 53), (97, 61), (97, 47), (75, 53), (61, 53), (97, 53), (97, 75), (47, 61), (75, 61)
             // from here we need to determine the correct possible ordering, regardless of initial ordering
-            let updates: Vec<(u32, u32)> = queue.updates
+            let updates: Vec<(u32, u32)> = queue
+                .updates
                 .clone()
                 .into_iter()
                 .filter(|(a, b)| page.contains(a) && page.contains(b))
                 .collect();
 
             let mut map: HashMap<u32, u32> = HashMap::new();
-            updates.iter()
-                .for_each(|(_, y)| {
-                    *map.entry(*y).or_insert(0) += 1;
-                });
-            let mut new_page: Vec<u32> = page.clone();
-            new_page.sort_by(|a, b| {
-                map.get(a).unwrap_or(&0).cmp(&map.get(b).unwrap_or(&0))
+            updates.iter().for_each(|(_, y)| {
+                *map.entry(*y).or_insert(0) += 1;
             });
+            let mut new_page: Vec<u32> = page.clone();
+            new_page.sort_by(|a, b| map.get(a).unwrap_or(&0).cmp(&map.get(b).unwrap_or(&0)));
             let (_, right) = new_page.split_at(page.len() / 2);
             queue.total += right[0] as u32;
         }

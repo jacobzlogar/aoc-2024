@@ -4,14 +4,20 @@ use aoc_2024::day3;
 use aoc_2024::day4;
 use aoc_2024::day5;
 use aoc_2024::day6;
+use aoc_2024::day7;
+use aoc_2024::day8;
+use aoc_2024::day9;
 
 fn main() -> Result<(), Box<dyn std::error::Error>> {
     // day1::part1()?;
     // day1::part2()?;
-    day2::run()?;
-    day3::run()?;
-    day4::run()?;
-    day5::run()?;
-    day6::run()?;
+    // day2::run()?;
+    // day3::run()?;
+    // day4::run()?;
+    // day5::run()?;
+    // day6::run()?;
+    // day7::run()?;
+    // day8::run()?;
+    day9::run()?;
     Ok(())
 }

@@ -27,7 +27,12 @@ pub fn run() -> Result<()> {
     );
     println!("Day 4, part 1: {result}");
     let points = find_starting_points(&matrix.clone(), 'A');
-    let result = find_matches(points, matrix, create_directions_vec(false), "MASMAS".into());
+    let result = find_matches(
+        points,
+        matrix,
+        create_directions_vec(false),
+        "MASMAS".into(),
+    );
     println!("Day 4, part 2: {result}");
     Ok(())
 }
@@ -81,28 +86,22 @@ fn find_starting_points(matrix: &CharMatrix, needle: char) -> Vec<CoordVec> {
         .collect::<Vec<CoordVec>>()
 }
 
-fn check_direction(
-    directions: &Vec<(isize, isize)>,
-    matrix: &CharMatrix,
-    needle: &str,
-) -> bool {
-    if directions.iter().any(|direction| direction.0 < 0 || direction.1 < 0) {
+fn check_direction(directions: &Vec<(isize, isize)>, matrix: &CharMatrix, needle: &str) -> bool {
+    if directions
+        .iter()
+        .any(|direction| direction.0 < 0 || direction.1 < 0)
+    {
         return false;
     }
 
     let query_matrix = |point: (usize, usize)| -> Option<&char> {
-        return matrix
-            .get(point.0)
-            .and_then(|row| row.get(point.1));
+        return matrix.get(point.0).and_then(|row| row.get(point.1));
     };
 
     let checks: Vec<Option<&char>> = directions
         .iter()
         .map(|direction| {
-            return query_matrix((
-                direction.0 as usize,
-                direction.1 as usize,
-            ));
+            return query_matrix((direction.0 as usize, direction.1 as usize));
         })
         .collect();
 
@@ -126,7 +125,8 @@ fn find_matches(
         result += directions
             .iter()
             .map(|direction| {
-                let directions = direction.iter()
+                let directions = direction
+                    .iter()
                     .map(|d| (d.0 as isize + point.0, d.1 as isize + point.1))
                     .collect::<Vec<(isize, isize)>>();
                 return check_direction(&directions, &matrix, &needle);
@@ -154,7 +154,12 @@ mod tests {
     fn test_x_mas() {
         let matrix = create_matrix(TEST);
         let points = find_starting_points(&matrix, 'A');
-        let result = find_matches(points.clone(), matrix.clone(), create_directions_vec(false), "MASMAS".into());
+        let result = find_matches(
+            points.clone(),
+            matrix.clone(),
+            create_directions_vec(false),
+            "MASMAS".into(),
+        );
         assert_eq!(result, 9);
     }
 }
