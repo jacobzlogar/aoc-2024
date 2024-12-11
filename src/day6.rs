@@ -1,6 +1,4 @@
 use miette::IntoDiagnostic;
-use tracing_subscriber::fmt;
-use tracing_subscriber::fmt::format::FmtSpan;
 
 #[derive(Debug, Clone, Copy)]
 enum Direction {
@@ -307,11 +305,6 @@ impl Lab {
 }
 
 pub fn run() -> miette::Result<()> {
-    fmt::fmt()
-        .with_span_events(FmtSpan::CLOSE)
-        .with_target(false)
-        .with_level(false)
-        .init();
     let data = std::fs::read_to_string("data/day6.txt").into_diagnostic()?;
     let mut lab = Lab::parse(&data);
     println!("Day 6, part 1: {}", part_1(&mut lab));

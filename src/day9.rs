@@ -1,7 +1,14 @@
 use std::collections::BinaryHeap;
+
 pub fn run() -> miette::Result<()> {
-    crate::get_input("day9")?;
+    let data = crate::get_input("day9")?;
+    println!("Day 9, part 1: {}", part_1(&data));
     Ok(())
+}
+
+fn part_1(data: &str) -> usize {
+    let mut fs = FileSystem::parse(&data);
+    fs.solve(false)
 }
 
 #[derive(Debug, Copy, Clone)]
@@ -19,6 +26,29 @@ struct FileSystem {
 impl FileSystem {
     fn remaining_blocksize(&mut self) -> usize {
         self.files.iter().fold(0, |acc, e| acc + e.block_size as usize)
+    }
+
+    #[tracing::instrument(skip_all)]
+    fn solve(&mut self, contiguous: bool) -> usize {
+        let mut output: Vec<usize> = vec![];
+        let mut file_map = self.build();
+        let mut files = self.files.clone();
+        for i in 0..files.len() {
+            let mut file = files[i];
+            if file.file_size == 0 {
+                break;
+            }
+            output.extend(std::iter::repeat(file.id).take(file.file_size).collect::<Vec<usize>>());
+            if let Some(last) = file_map.pop() {
+                if let Some(existing) = files.iter_mut().find(|f| f.id == last) {
+                    existing.file_size = 0;
+                    existing.block_size = 0;
+                }
+                output.push(last);
+            }
+            file.block_size = 0;
+        }
+        output.iter().enumerate().fold(0, |acc, (id, value)| acc + (id * value))
     }
 
     fn print_files(&mut self) {
@@ -39,57 +69,32 @@ impl FileSystem {
         }).collect::<Vec<usize>>()
     }
     
+    #[tracing::instrument(skip_all)]
     fn parse(text: &str) -> Self {
         let mut files: Vec<File> = vec![];
         let mut id = 0;
         text.chars().enumerate().for_each(|(index, ch)| {
-            let x = ch.to_digit(10).unwrap() as usize;
-            if index % 2 == 0 {
-                files.push(File {
-                    id,
-                    file_size: x,
-                    block_size: 0
-                });
-                id += 1;
-            } else {
-                files[id-1].block_size = x as isize;
+            if let Some(digit) = ch.to_digit(10) {
+                if index % 2 == 0 {
+                    files.push(File {
+                        id,
+                        file_size: digit as usize,
+                        block_size: 0
+                    });
+                    id += 1;
+                } else {
+                    files[id-1].block_size = digit as isize;
+                }
             }
         });
         Self { files }
     }
-
-    fn solve(&mut self) -> usize {
-        let mut output: Vec<usize> = vec![];
-        let mut files = self.files.clone();
-        let mut block_map = self.build();
-        let mut files_iter = files.iter();
-        while let Some(mut file) = files_iter.next().cloned() {
-            if file.block_size > 0 {
-                output.extend(std::iter::repeat(file.id).take(file.file_size).collect::<Vec<usize>>());
-            }
-            while file.block_size > 0 {
-                if let Some(last) = block_map.pop() {
-                    output.push(last);
-                    if let Some(mut f) = files.iter().find(|file| file.id == last).cloned() {
-                        println!("{:?}", f);
-                        f.block_size -= 1;
-                    }
-                }
-                file.block_size -= 1;
-            }
-        }
-        println!("{:?}", output);
-        
-        // println!("{:?}", output);
-        1
-    }
 }
 
 const TEST: &str = "2333133121414131402";
+
 #[cfg(test)]
 #[test]
 fn test_day9_part1() {
-    let mut fs = FileSystem::parse(TEST);
-    fs.print_files();
-    fs.solve();
+    assert_eq!(part_1(TEST), 1928);
 }
