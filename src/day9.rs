@@ -38,7 +38,6 @@ impl FileSystem {
 
     #[tracing::instrument(skip_all)]
     fn solve(&mut self, contiguous: bool) -> usize {
-        println!("{:?}", self.files);
         // let mut output: Vec<usize> = vec![];
         // let mut file_map = self.build();
         // let mut files = self.files.clone();
