@@ -1,5 +1,5 @@
-use std::collections::BinaryHeap;
 use std::cmp::{Ord, Ordering, Reverse};
+use std::collections::BinaryHeap;
 
 pub fn run() -> miette::Result<()> {
     let data = crate::get_input("day9")?;
@@ -16,7 +16,7 @@ fn part_1(data: &str) -> usize {
 struct File {
     id: usize,
     file_size: usize,
-    block_size: isize 
+    block_size: isize,
 }
 
 impl Ord for File {
@@ -28,7 +28,7 @@ impl Ord for File {
 #[derive(Debug, Clone)]
 struct FileSystem {
     heap: BinaryHeap<File>,
-    files: Vec<File>
+    files: Vec<File>,
 }
 
 impl FileSystem {
@@ -38,6 +38,17 @@ impl FileSystem {
 
     #[tracing::instrument(skip_all)]
     fn solve(&mut self, contiguous: bool) -> usize {
+        let mut output = 0;
+        let mut id = 0;
+        for i in 0..self.files.len() {
+            let mut file = self.files[i];
+            for _ in 0..file.file_size {
+                output += file.id * id;
+                id += 1;
+            }
+            file.file_size = 0;
+            if let Some(mut last) = self.heap.pop() {}
+        }
         // let mut output: Vec<usize> = vec![];
         // let mut file_map = self.build();
         // let mut files = self.files.clone();
@@ -57,7 +68,7 @@ impl FileSystem {
         //     file.block_size = 0;
         // }
         // output.iter().enumerate().fold(0, |acc, (id, value)| acc + (id * value))
-        1
+        output
     }
 
     fn print_files(&mut self) {
@@ -78,7 +89,7 @@ impl FileSystem {
         // }).collect::<Vec<usize>>()
         vec![]
     }
-    
+
     #[tracing::instrument(skip_all)]
     fn parse(text: &str) -> Self {
         let mut heap = BinaryHeap::new();
@@ -86,18 +97,17 @@ impl FileSystem {
         let mut char_iter = text.chars().enumerate().peekable();
         let mut id = 0;
         while let Some((_, file_size)) = char_iter.next() {
-            let file_size = file_size.to_digit(10).unwrap() as usize; 
+            let file_size = file_size.to_digit(10).unwrap() as usize;
             if let Some((_, block_size)) = char_iter.next() {
                 if let Some(block_size) = block_size.to_digit(10) {
                     let file = File {
                         id,
                         block_size: block_size as isize,
-                        file_size
+                        file_size,
                     };
                     id += 1;
                     heap.push(file);
                     files.push(file)
-                        
                 }
             } else {
                 let file = File {
@@ -113,7 +123,7 @@ impl FileSystem {
     }
 }
 
-const TEST: &str = "2333133121414131402";
+const TEST: &str = "12345";
 
 #[cfg(test)]
 #[test]

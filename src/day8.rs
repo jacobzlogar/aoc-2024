@@ -22,7 +22,7 @@ fn part_2(data: &str) -> usize {
 struct Point {
     x: isize,
     y: isize,
-    symbol: char
+    symbol: char,
 }
 
 #[derive(Debug, PartialEq, Eq, Clone)]
@@ -44,16 +44,18 @@ impl Roof {
     fn print_map(&mut self) {
         for y in 0..self.height {
             for x in 0..self.width {
-                let antenna_at_point = self.antenna_map
+                let antenna_at_point = self
+                    .antenna_map
                     .iter()
                     .find(|antenna| antenna.x == x && antenna.y == y);
-                let antinode_at_point = self.antinode_map
+                let antinode_at_point = self
+                    .antinode_map
                     .iter()
                     .find(|antenna| antenna.x == x && antenna.y == y);
                 match (antenna_at_point, antinode_at_point) {
                     (Some(antenna), _) => print!("{}", antenna.symbol),
                     (None, Some(_)) => print!("#"),
-                    _ => print!(".")
+                    _ => print!("."),
                 }
             }
             println!("");
@@ -67,7 +69,9 @@ impl Roof {
         for antenna in self.antenna_map.clone().into_iter() {
             let antennas = self.antenna_map.clone();
             let other_antennas = antennas.iter().filter(|&other| {
-                return other.x != antenna.x && other.y != antenna.y && other.symbol == antenna.symbol;
+                return other.x != antenna.x
+                    && other.y != antenna.y
+                    && other.symbol == antenna.symbol;
             });
             for other_antenna in other_antennas {
                 let diff = (antenna.x - other_antenna.x, antenna.y - other_antenna.y);
@@ -99,17 +103,20 @@ impl Roof {
         }
     }
 
-    
     fn parse(text: &str) -> Self {
         let mut antenna_map = vec![];
         let height = text.lines().count() as isize;
-        let width = text.lines().nth(0).unwrap().len() as isize; 
+        let width = text.lines().nth(0).unwrap().len() as isize;
         for (row, line) in text.lines().enumerate() {
             for (column, ch) in line.chars().enumerate() {
                 if ch == '.' {
                     continue;
                 }
-                let point = Point { x: column as isize, y: row as isize, symbol: ch };
+                let point = Point {
+                    x: column as isize,
+                    y: row as isize,
+                    symbol: ch,
+                };
                 antenna_map.push(point);
             }
         }
@@ -122,8 +129,7 @@ impl Roof {
     }
 }
 
-const TEST: &str =
-r#"............
+const TEST: &str = r#"............
 ........0...
 .....0......
 .......0....
@@ -141,8 +147,7 @@ fn test_day8_part1() {
     assert_eq!(part_1(TEST), 14);
 }
 
-const TEST_PART2 : &str =
-r#"T.........
+const TEST_PART2: &str = r#"T.........
 ...T......
 .T........
 ..........
