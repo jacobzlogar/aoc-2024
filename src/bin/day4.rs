@@ -15,7 +15,7 @@ const TEST: &str = r#"
             MAMMMXMMMM
             MXMXAXMASX"#;
 
-pub fn run() -> Result<()> {
+pub fn main() -> Result<()> {
     let data = std::fs::read_to_string("data/day4.txt").unwrap();
     let matrix = create_matrix(&data);
     let points = find_starting_points(&matrix.clone(), 'X');

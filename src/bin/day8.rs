@@ -1,5 +1,5 @@
-pub fn run() -> miette::Result<()> {
-    let data = crate::get_input("day8")?;
+pub fn main() -> miette::Result<()> {
+    let data = aoc_2024::get_input("day8")?;
     println!("Day 8, part 1: {:?}", part_1(&data));
     println!("Day 8, part 2: {:?}", part_2(&data));
     Ok(())

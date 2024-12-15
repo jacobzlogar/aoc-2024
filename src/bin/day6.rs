@@ -304,7 +304,7 @@ impl Lab {
     }
 }
 
-pub fn run() -> miette::Result<()> {
+pub fn main() -> miette::Result<()> {
     let data = std::fs::read_to_string("data/day6.txt").into_diagnostic()?;
     let mut lab = Lab::parse(&data);
     println!("Day 6, part 1: {}", part_1(&mut lab));

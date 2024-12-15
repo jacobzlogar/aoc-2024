@@ -25,7 +25,7 @@ impl FromStr for Cond {
     }
 }
 
-pub fn run() -> Result<(), Box<dyn std::error::Error>> {
+pub fn main() -> Result<(), Box<dyn std::error::Error>> {
     let data = std::fs::read_to_string("data/day3.txt")?;
     let iter = data.chars();
     let part_1: i32 = parse(&mut iter.clone(), false)?.iter().sum();

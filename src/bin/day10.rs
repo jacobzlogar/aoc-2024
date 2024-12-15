@@ -91,8 +91,8 @@ impl TrailHead {
     }
 }
 
-pub fn run() -> miette::Result<()> {
-    let data = crate::get_input("day10")?;
+pub fn main() -> miette::Result<()> {
+    let data = aoc_2024::get_input("day10")?;
     println!("Day 10, part 1: {}", part_1(&data));
     println!("Day 10, part 2: {}", part_2(&data));
     Ok(())

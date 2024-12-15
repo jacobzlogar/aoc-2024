@@ -1,8 +1,8 @@
 use std::cmp::{Ord, Ordering, Reverse};
 use std::collections::BinaryHeap;
 
-pub fn run() -> miette::Result<()> {
-    let data = crate::get_input("day9")?;
+pub fn main() -> miette::Result<()> {
+    let data = aoc_2024::get_input("day9")?;
     println!("Day 9, part 1: {}", part_1(&data));
     Ok(())
 }

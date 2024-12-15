@@ -13,7 +13,7 @@ fn differs_by_3(vec: &[i32]) -> bool {
     })
 }
 
-pub fn run() -> Result<(), Box<dyn std::error::Error>> {
+pub fn main() -> Result<(), Box<dyn std::error::Error>> {
     let mut part_1 = 0;
     let mut part_2 = 0;
     let f = std::fs::read_to_string("data/day2-rick.txt")?;

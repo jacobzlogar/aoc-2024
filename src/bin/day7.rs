@@ -56,7 +56,7 @@ impl Bridge {
     }
 }
 
-pub fn run() -> miette::Result<()> {
+pub fn main() -> miette::Result<()> {
     let data = &std::fs::read_to_string("data/day7.txt").into_diagnostic()?;
     let mut bridge = Bridge::parse(&data);
     println!("Day 7, part 1: {}", solve(&mut bridge, false));

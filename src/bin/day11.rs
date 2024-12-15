@@ -1,7 +1,7 @@
 use std::collections::HashMap;
 
-pub fn run() -> miette::Result<()> {
-    let data = crate::get_input("day11")?;
+pub fn main() -> miette::Result<()> {
+    let data = aoc_2024::get_input("day11")?;
     println!("Day 11, part 1: {}", part_1(&data, 25)?);
     println!("Day 11, part 2: {}", part_2(&data, 75)?);
     Ok(())

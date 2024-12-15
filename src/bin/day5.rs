@@ -1,7 +1,7 @@
 use miette::{miette, IntoDiagnostic, Result};
 use std::collections::HashMap;
 
-pub fn run() -> Result<()> {
+pub fn main() -> Result<()> {
     let input = std::fs::read_to_string("data/day5.txt").into_diagnostic()?;
     let mut queue = PrintQueue::parse(&input);
     println!("Day 5, part 1: {:?}", solve(&mut queue, false));

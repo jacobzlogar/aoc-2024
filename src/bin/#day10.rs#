@@ -1,0 +1,37 @@
+use std::collections::HashSet;
+
+const DIREn() -> miette::Result<()> {
+    let data = aoc_2024::get_input("day10")?;
+    println!("Day 10, part 1: {}", part_1(&data));
+    println!("Day 10, part 2: {}", part_2(&data));
+    Ok(())
+}
+
+fn part_1(data: &str) -> u32 {
+    let mut trailhead = TrailHead::parse(data);
+    trailhead.solve(false)
+}
+
+fn part_2(data: &str) -> u32 {
+    let mut trailhead = TrailHead::parse(data);
+    trailhead.solve(true)
+}
+
+const TEST: &str = r#"89010123
+78121874
+87430965
+96549874
+45678903
+32019012
+01329801
+10456732"#;
+
+#[cfg(test)]
+#[test]
+fn test_day10_part1() {
+    assert_eq!(part_1(TEST), 36);
+}
+#[test]
+fn test_day10_part2() {
+    assert_eq!(part_2(TEST), 81);
+}
