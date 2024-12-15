@@ -22,7 +22,12 @@ impl TrailHead {
         }
         let width = map.len();
         let length = map[0].len();
-        Self { map, width, length, result: 0 }
+        Self {
+            map,
+            width,
+            length,
+            result: 0,
+        }
     }
 
     pub fn dfs(
@@ -45,16 +50,20 @@ impl TrailHead {
             return 1;
         }
 
-        let points: Vec<(usize, usize)> = DIRECTIONS.iter().filter_map(|direction| {
-            if let Ok(dx) = usize::try_from(direction.0 + point.0 as i8) {
-                if let Ok(dy) = usize::try_from(direction.1 + point.1 as i8) {
-                    return Some((dx, dy));
+        let points: Vec<(usize, usize)> = DIRECTIONS
+            .iter()
+            .filter_map(|direction| {
+                if let Ok(dx) = usize::try_from(direction.0 + point.0 as i8) {
+                    if let Ok(dy) = usize::try_from(direction.1 + point.1 as i8) {
+                        return Some((dx, dy));
+                    }
                 }
-            }
-            None
-        }).filter(|&(dx, dy)| {
-            return dx <= self.width - 1 && dy <= self.length - 1 && map[dx][dy] == active + 1;
-        }).collect();
+                None
+            })
+            .filter(|&(dx, dy)| {
+                return dx <= self.width - 1 && dy <= self.length - 1 && map[dx][dy] == active + 1;
+            })
+            .collect();
 
         for point in points {
             count += self.dfs(point, map, visited, rating, 0);
@@ -68,7 +77,13 @@ impl TrailHead {
             for (col_index, col) in row.iter().enumerate() {
                 if col == &0 {
                     let mut visited: HashSet<Point> = HashSet::new();
-                    self.result += self.dfs((row_index, col_index), &self.map.clone(), &mut visited, rating, 0); 
+                    self.result += self.dfs(
+                        (row_index, col_index),
+                        &self.map.clone(),
+                        &mut visited,
+                        rating,
+                        0,
+                    );
                 }
             }
         }
@@ -93,8 +108,7 @@ fn part_2(data: &str) -> u32 {
     trailhead.solve(true)
 }
 
-const TEST: &str =
-r#"89010123
+const TEST: &str = r#"89010123
 78121874
 87430965
 96549874

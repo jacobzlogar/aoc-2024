@@ -3,6 +3,9 @@ use tracing_subscriber::fmt::format::FmtSpan;
 
 use aoc_2024::day1;
 use aoc_2024::day10;
+use aoc_2024::day11;
+use aoc_2024::day12;
+use aoc_2024::day13;
 use aoc_2024::day2;
 use aoc_2024::day3;
 use aoc_2024::day4;
@@ -28,6 +31,7 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
     // day7::run()?;
     // day8::run()?;
     // day9::run()?;
-    day10::run()?;
+    // day10::run()?;
+    day11::run()?;
     Ok(())
 }
