@@ -2,6 +2,8 @@ use miette::IntoDiagnostic;
 use tracing_subscriber::fmt;
 use tracing_subscriber::fmt::format::FmtSpan;
 
+pub mod day12;
+
 pub fn get_input(day: &str) -> miette::Result<String> {
     // this probably shouldn't live here?
     fmt::fmt()
@@ -16,4 +18,3 @@ pub fn get_input(day: &str) -> miette::Result<String> {
         .map_err(|e| miette::miette!("{e}: {path}"))?;
     Ok(data)
 }
-

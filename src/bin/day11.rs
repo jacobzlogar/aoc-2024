@@ -42,7 +42,10 @@ impl Arrangement {
             result: 0,
         };
         for stone in stones.clone() {
-            arrangement.frequency.entry(stone).and_modify(|e| *e += 1)
+            arrangement
+                .frequency
+                .entry(stone)
+                .and_modify(|e| *e += 1)
                 .or_insert(1);
         }
         Ok(arrangement)
